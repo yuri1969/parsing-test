@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id "org.openrewrite.rewrite" version "7.5.0"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    dependencies {
+        // Lombok
+        annotationProcessor "org.projectlombok:lombok:1.18.36"
+        compileOnly 'org.projectlombok:lombok:1.18.36'
+
+        // OpenRewrite
+        rewrite(platform("org.openrewrite.recipe:rewrite-recipe-bom:latest.release"))
+        rewrite("org.openrewrite.recipe:rewrite-migrate-java")
+    }
+}
+
+
+test {
+    useJUnitPlatform()
+}
+
+rewrite {
+    activeRecipe(
+        "org.openrewrite.java.migrate.net.JavaNetAPIs"
+    )
+
+    setExportDatatables(true)
+}
